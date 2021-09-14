@@ -84,6 +84,13 @@ export class UserService {
   async allStreams(){
     try {
       const streams = await this.streamRepo.find({where:{endAt:'NOT_ENDED'}, select:['email'] , order:{id:'DESC'}});
+      // var now = Date.now();
+      // var fourHoursLater = now.addHours(4);
+      
+      // function Date.prototype.addHours(h) {
+      //   this.setHours(this.getHours()+h);
+      //   return this;
+      // }
       return streams;
     } catch (error) {
       

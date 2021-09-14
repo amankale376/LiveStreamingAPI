@@ -28,3 +28,17 @@ export class Stream {
   @Column()
   stream_id: string;
 }
+
+@Entity()
+export class Viewer {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  email: string;
+  @Column()
+  stream_path: string;
+  @Column()
+  joined_at: string;
+  @Column()
+  stream_id: string;
+}

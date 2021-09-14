@@ -24,7 +24,7 @@ export class UserController {
   @Render('watchStream')
   async Watch(@Param('email') email) {
     const stream_name = await this.userService.watchStream(email);
-    return { stream_name };
+    return { stream_name, email };
   }
 
   @Get('AllStreams')

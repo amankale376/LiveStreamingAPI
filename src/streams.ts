@@ -1,9 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 import * as NodeMediaServer from 'node-media-server';
+import { WebsocketGateway } from './websocket/websocket.gateway';
 import { getRepository } from 'typeorm';
 import { Stream, User } from './user/user.entity';
-
 const config = {
   auth: {
     api: true,
@@ -24,7 +24,7 @@ const config = {
     allow_origin: '*',
   },
 };
-
+const web = new WebsocketGateway();
 export async function abc() {
   const nms = new NodeMediaServer(config);
   nms.run();
@@ -44,7 +44,7 @@ export async function abc() {
       newStream.stream_id = id;
       await getRepository(Stream).save(newStream);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       const session = nms.getSession(id);
       session.reject();
     }
@@ -57,6 +57,7 @@ export async function abc() {
       findStream.endAt = new Date().toString();
       await getRepository(Stream).save(findStream);
     } catch (error) {
+      console.log(error);
       const session = nms.getSession(id);
       session.reject();
     }

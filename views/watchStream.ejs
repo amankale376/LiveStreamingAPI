@@ -5,11 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body> 
     <script src="https://cdn.bootcss.com/flv.js/1.5.0/flv.min.js"></script>
     <video id="videoElement" muted></video>
+
     <script>
+        var clientEmail = prompt('Enter your Email');
+        var password = prompt('Enter your password');
         if (flvjs.isSupported()) {
             var videoElement = document.getElementById('videoElement');
             var flvPlayer = flvjs.createPlayer({
@@ -21,5 +26,47 @@
             flvPlayer.play();
         }
     </script>
+    <div id='v-app'>
+       
+  
+
+</div>
+    <script>
+    var app = new Vue({
+        el:'#v-app',
+        data:{
+            stream:false,
+            socket:null,
+            views:0,
+        },
+        methods:{
+        },
+        created(){
+            this.socket = io("http://localhost:3000")
+            this.socket.emit('login', {email:clientEmail, password:password , stream_path:'<%= stream_name %>'});
+            this.socket.on('loginTrue',(payload)=>{
+            if(payload){
+                this.socket.emit('isAvail', {email:clientEmail})
+            this.socket.on('stopStream',(payload)=>{
+        this.stream = false;
+        console.log(this.stream)
+    })
+            this.socket.on('confirm',(Stream)=>{
+                console.log(Stream)
+              this.stream = Stream.Stream;
+            })
+            this.socket.emit('views', {stream_path:'<%= stream_name %>'});
+          this.socket.on('total', (total)=>{
+              this.views = total;
+              console.log(total)
+          })
+            }
+            })
+            window.addEventListener('beforeuload', (e) => {
+                this.socket.emit('closePlayer', clientEmail);
+            })
+        }
+    })
+</script>
 </body>
 </html>

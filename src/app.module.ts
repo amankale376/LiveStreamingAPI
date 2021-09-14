@@ -5,6 +5,8 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { Auth } from './common/middleware/auth.middleware';
+import { WebsocketModule } from './websocket/websocket.module';
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -18,6 +20,7 @@ import { Auth } from './common/middleware/auth.middleware';
       entities: [join(__dirname, '**', '*.entity{.ts,.js}')],
     }),
     UserModule,
+    WebsocketModule,
   ],
   controllers: [],
   providers: [],
